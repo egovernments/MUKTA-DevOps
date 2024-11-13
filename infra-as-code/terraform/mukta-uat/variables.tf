@@ -31,7 +31,7 @@ variable "number_of_worker_nodes" {
 
 variable "db_version" {
   description = "database version"
-  default = "12.17"
+  default = "15.7"
 }
 
 variable "db_name" {
