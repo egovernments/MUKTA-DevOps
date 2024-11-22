@@ -92,7 +92,7 @@ env: |
       configMapKeyRef:
         name: egov-service-host
         key: bankaccounts
-  - name: EGOV_INDVIDUAL_HOST
+  - name: EGOV_INDIVIDUAL_HOST
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
