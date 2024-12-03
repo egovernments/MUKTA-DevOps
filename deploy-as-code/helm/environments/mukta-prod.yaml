@@ -236,7 +236,7 @@ works-management-service:
 
 ifms-adapter:
   tracing-enabled: true
-  heap: "-Xmx368m -Xms368m"
+  heap: "-Xmx512m -Xms512m"
   #java-enable-debug: false
   payment-create-topic: "expense-payment-create"
   egov-idgen-ifms-pi-reference-number: "ifms.pi.reference.number"
