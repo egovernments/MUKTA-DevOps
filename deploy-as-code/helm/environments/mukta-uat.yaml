@@ -142,7 +142,7 @@ estimate-service:
   estimate-default-limit: 100
   estimate-search-max-limit: 200
   estimate-workflow-business-service: "ESTIMATE"
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
   is-caching-enabled: true
   redis-expiry-time: 3600
 
@@ -179,7 +179,7 @@ contract-service:
   contract-workflow-module-name: "contract-service"
   contract-cbo-url-host : "https://mukta-uat.digit.org"
   contract-cbo-url-endpoint : "/works-shg-app"
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
 
 bulk-upload:
   tracing-enabled: true
@@ -208,7 +208,7 @@ muster-roll:
   works-individual-search-endpoint: "individual/v1/_search"
   works-bankaccounts-search-endpoint: "bankaccount-service/bankaccount/v1/_search"
   works-contract-service-code: "WORKS-CONTRACT"
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
 
 organisation:
   tracing-enabled: true
@@ -221,7 +221,7 @@ organisation:
   organisation-contact-details-update-topic: organisation.contact.details.update
   sms-isAdditonalFieldRequired: true
   sms.isAdditonalFieldRequired: true
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
   egov-location-context-path: "/boundary-service/"
   egov-location-endpoint: "/boundary/_search"
 
@@ -237,7 +237,7 @@ individual:
   state-level-tenant-id: "od"
   aadhaar-pattern: "\\d{12}"
   mobile-pattern: "\\d+"
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
 
 works-management-service:
   heap: "-Xmx512m -Xms512m"
@@ -342,7 +342,7 @@ expense:
   expense-billing-default-limit: 100
   expense-billing-search-max-limit: 200
   business-workflow-status-map : "{'EXPENSE.WAGES':'true','EXPENSE.PURCHASE':'true','EXPENSE.SUPERVISION':'true'}"
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
 
 rate-analysis:
   java-enable-debug: true
@@ -589,7 +589,7 @@ measurement-service:
   measurement-service-default-offset: 0
   measurement-service-default-limit: 10
   measurement-service-search-max-limit: 50
-  notification-sms-enabled: "false"
+  notification-sms-enabled: false
 
 
 measurement-registry:
