@@ -179,7 +179,7 @@ contract-service:
   contract-workflow-module-name: "contract-service"
   contract-cbo-url-host : "https://mukta-uat.digit.org"
   contract-cbo-url-endpoint : "/works-shg-app"
-  notification-sms-enabled: false
+  notification-sms-enabled: "false"
 
 bulk-upload:
   tracing-enabled: true
