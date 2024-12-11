@@ -142,10 +142,8 @@ env: |
   - name: ORGANISATION_CONTACT_DETAILS_UPDATE_TOPIC
     value: {{ index .Values "organisation-contact-details-update-topic" | quote }}
   {{- end }}
-  {{- if index .Values "notification-sms-enabled" }}
-  - name: NOTIFICATION_SMS_ENABLED
-    value: {{ index .Values "notification-sms-enabled" | quote }} 
-  {{- end }}
+ - name: NOTIFICATION_SMS_ENABLED
+    value: "false"
   - name: WORKS_INDIVIDUAL_HOST
     valueFrom:
       configMapKeyRef:
