@@ -146,7 +146,7 @@ env: |
   - name: ESTIMATE_REVISION_MAX_LIMIT
     value: {{ index .Values "estimate-revision-max-limit" | quote }} 
   {{- end }}
- - name: NOTIFICATION_SMS_ENABLED
+  - name: NOTIFICATION_SMS_ENABLED
     value: "false"
   - name: WORKS_PROJECT_SERVICE_HOST
     valueFrom:
