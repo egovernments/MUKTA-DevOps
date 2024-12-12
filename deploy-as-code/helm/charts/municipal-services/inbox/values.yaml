@@ -59,7 +59,7 @@ env: |
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: egov-mdms-service
+        key: egov-mdms-service-v2
   {{- if index .Values "internal-microservice-user-req" }}      
   - name: EGOV_INTERNAL_MICROSERVICE_USER_UUID
     valueFrom:
@@ -119,3 +119,5 @@ env: |
       secretKeyRef:
         name: elasticsearch-credential
         key: password
+  - name: EGOV_MDMS_SEARCH_ENDPOINT
+    value: "/mdms-v2/v1/_search"  

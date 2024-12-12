@@ -53,7 +53,12 @@ env: |
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: egov-mdms-service
+        key: egov-mdms-service-v2
+  - name: EGOV_MDMS_V2_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: egov-service-host
+        key: egov-mdms-service-v2
   {{- if index .Values "java-enable-debug" }}
   - name: JAVA_ENABLE_DEBUG
     value: "true"
@@ -154,7 +159,7 @@ env: |
   - name: EXPENSE_BILLING_SEARCH_MAX_LIMIT
     value: {{ index .Values "expense-billing-search-max-limit" | quote }} 
   {{- end }}
-  {{- if index .Values "notification-sms-enabled" }}
   - name: NOTIFICATION_SMS_ENABLED
-    value: {{ index .Values "notification-sms-enabled" | quote }} 
-  {{- end }}
+    value: "false"
+  - name: EGOV_MDMS_SEARCH_ENDPOINT
+    value: "/mdms-v2/v1/_search"

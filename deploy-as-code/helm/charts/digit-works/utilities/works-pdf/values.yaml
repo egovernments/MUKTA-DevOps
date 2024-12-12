@@ -15,7 +15,7 @@ ingress:
 # Init Containers Configs
 initContainers:
   dbMigration:
-    enabled: true
+    enabled: false
     schemaTable: "works_pdf_schema"
     image:
       repository: "works-pdf-db"
@@ -174,3 +174,8 @@ env: |
       configMapKeyRef:
         name: egov-service-host
         key: egov-mdms-service-v2
+  - name: MUKTA_SERVICES_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: egov-service-host
+        key: mukta-services

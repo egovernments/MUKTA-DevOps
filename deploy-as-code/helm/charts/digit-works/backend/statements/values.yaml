@@ -63,7 +63,7 @@ env: |
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: egov-mdms-service
+        key: egov-mdms-service-v2
   - name: WORKS_ESTIMATE_HOST
     valueFrom:
       configMapKeyRef:
@@ -89,3 +89,5 @@ env: |
       configMapKeyRef:
         name: egov-config
         key: egov-state-level-tenant-id
+  - name: EGOV_MDMS_SEARCH_ENDPOINT
+    value: "/mdms-v2/v1/_search" 

@@ -81,11 +81,7 @@ cluster-configs:
 
     kibana: 
       namespace: egov
-      name: kibana-creds                       
-
-    kibana-infra: 
-      namespace: egov
-      name: kibana-infra-creds
+      name: kibana-creds
 
     egov-si-microservice:
       namespace: egov
@@ -152,11 +148,11 @@ cluster-configs:
       name: program-service
 
     elasticsearch:
-      namespace: [ es-upgrade, monitoring, kafka-cluster, egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-cluster, kafka-kraft, egov, works ]
       name: elasticsearch-credential
 
     elasticsearch-certificate:
-      namespace: [ es-upgrade, monitoring, kafka-kraft , egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-cluster, kafka-kraft, egov, works ]
       name: elasticsearch-certs
 
     jupyterhub:

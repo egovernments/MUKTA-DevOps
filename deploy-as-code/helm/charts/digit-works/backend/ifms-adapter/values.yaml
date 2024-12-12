@@ -28,8 +28,8 @@ healthChecks:
   enabled: false
 appType: "java-spring"
 tracing-enabled: true
-heap: "-Xmx256m -Xms256m"
-memory_limits: 512Mi
+heap: "-Xmx512m -Xms512m"
+memory_limits: 850Mi
 java-args: ""
 
 # Additional Container Envs
@@ -100,7 +100,7 @@ env: |
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: egov-mdms-service
+        key: egov-mdms-service-v2
   - name: EGOV_BILL_HOST
     valueFrom:
       configMapKeyRef:
@@ -241,3 +241,5 @@ env: |
   - name: ORIGINAL_PI_EXPIRE_FINANCIAL_YEAR_MONTH
     value: {{ index .Values "original-pi-expire-financial-year-month" | quote }} 
   {{- end }}
+  - name: EGOV_MDMS_SEARCH_ENDPOINT
+    value: "/mdms-v2/v1/_search"

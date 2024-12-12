@@ -149,7 +149,5 @@ env: |
   - name: STATE_LEVEL_TENANT_ID
     value: {{ index .Values "state-level-tenant-id" | quote }}
   {{- end }}
-  {{- if index .Values "notification-sms-enabled" }}
   - name: NOTIFICATION_SMS_ENABLED
-    value: {{ index .Values "notification-sms-enabled" | quote }} 
-  {{- end }}
+    value: "false"

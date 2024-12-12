@@ -50,7 +50,7 @@ env: |
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: egov-mdms-service
+        key: egov-mdms-service-v2
   - name: EGOV_STATE_LEVEL_TENANT_ID
     valueFrom:
       configMapKeyRef:
@@ -101,3 +101,5 @@ env: |
   - name: AWS_KMS_MASTER_PASSWORD_KEY_ID
     value: {{ index .Values "aws-kms-master-password-key-id" | quote }}
   {{- end }}
+  - name: EGOV_MDMS_SEARCH_ENDPOINT
+    value: "/mdms-v2/v1/_search"
