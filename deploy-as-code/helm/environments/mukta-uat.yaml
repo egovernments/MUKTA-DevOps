@@ -13,18 +13,15 @@ cluster-configs:
         egov,
         works,
         jupyter,
-        es-cluster,
         es-upgrade,
-        kafka-cluster,
-        logging,
+        kafka-kraft,
         monitoring,
         playground,
-        zookeeper-cluster,
       ]
 
   rbac:
     - role: user
-      namespaces: [egov, works, playground, kafka-cluster]
+      namespaces: [ egov, works, playground, kafka-kraft ]
     - role: admin
       namespaces: [playground]
 
@@ -36,7 +33,7 @@ cluster-configs:
 
   secrets:
     elasticsearch:
-      namespace: [ es-upgrade, monitoring, kafka-cluster, egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-kraft, egov, works ]
       name: elasticsearch-credential
 
   configmaps:
@@ -136,7 +133,7 @@ cluster-configs:
         statements: "http://statements.works:8080/"
 
         jmx-exporter-config:
-          namespace: [ uat ]
+          namespace: [ egov, ifix, works ]
 
 #######------WORKS-----######
 estimate-service:

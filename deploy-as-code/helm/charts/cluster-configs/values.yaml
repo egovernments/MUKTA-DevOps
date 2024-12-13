@@ -36,7 +36,7 @@ cluster-configs:
 
     jmx-exporter-config:
       name: jmx-exporter-config
-      namespace: [ naljal ]
+      namespace: [ egov ]
       config: |
         rules:
           - pattern: ".*"
@@ -155,11 +155,11 @@ cluster-configs:
       name: program-service
 
     elasticsearch:
-      namespace: [ es-upgrade, monitoring, kafka-cluster, kafka-kraft, egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-kraft, egov, works ]
       name: elasticsearch-credential
 
     elasticsearch-certificate:
-      namespace: [ es-upgrade, monitoring, kafka-cluster, kafka-kraft, egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-kraft, egov, works ]
       name: elasticsearch-certs
 
     jupyterhub:
