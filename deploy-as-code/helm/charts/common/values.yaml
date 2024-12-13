@@ -8,6 +8,7 @@ namespace: egov
 replicas: 1
 httpPort: 8080
 appType: ""
+defaultJavaOpts: "-server -XX:+UseG1GC"
 
 ingress:
   enabled: false
@@ -26,7 +27,9 @@ ingress:
       nginx.ingress.kubernetes.io/lua-resty-waf-process-multipart-body: "false"              
 
 image:
-  pullPolicy: IfNotPresent   
+  pullPolicy: IfNotPresent
+  imagePullSecrets:
+    - name: pullsecret
 
 affinity:
     preferSpreadAcrossAZ: true
@@ -87,6 +90,17 @@ initContainers:
           value: "true"      
         - name: "GIT_SYNC_ROOT"
           value: "/work-dir"
+
+  jmxExporter:
+    image:
+      repository: busybox
+      tag: latest
+      pullPolicy: IfNotPresent
+    command: |
+      - sh
+      - -c
+      - wget -q -O /jmx-agent/jmx_prometheus_javaagent.jar https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.17.2/jmx_prometheus_javaagent-0.17.2.jar;
+    javaAgent: "-javaagent:/jmx-agent/jmx_prometheus_javaagent.jar=9404:/config/config.yaml"
 
 healthChecks:
     enabled: false

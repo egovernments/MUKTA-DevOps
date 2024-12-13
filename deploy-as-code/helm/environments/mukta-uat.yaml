@@ -135,6 +135,8 @@ cluster-configs:
         ifix-program-service: "http://program-service.ifix:8080/"
         statements: "http://statements.works:8080/"
 
+        jmx-exporter-config:
+          namespace: [ uat ]
 
 #######------WORKS-----######
 estimate-service:
@@ -241,7 +243,7 @@ individual:
   notification-sms-enabled: false
 
 works-management-service:
-  heap: "-Xmx512m -Xms512m"
+  heap: "-Xmx256m -Xms256m"
   memory_limits: 512Mi
   tracing-enabled: true
   java-enable-debug: true
@@ -1113,6 +1115,27 @@ prometheus:
     - job_name: 'blackbox_exporter'
       static_configs:
         - targets: [ 'prometheus-blackbox-exporter:9115' ]
+    - job_name: 'java-services'
+      kubernetes_sd_configs:
+        - role: pod
+      relabel_configs:
+        # Keep only pods with the label `app-type=java`
+        - source_labels: [ __meta_kubernetes_pod_label_app_type ]
+          action: keep
+          regex: java
+        # Extract the Pod IP and set it as the scrape target
+        - source_labels: [ __meta_kubernetes_pod_ip ]
+          action: replace
+          target_label: __address__
+          replacement: ${1}:9404
+        # Override the default metrics path if needed
+        - action: replace
+          target_label: __metrics_path__
+          replacement: /metrics
+        - source_labels: [ __meta_kubernetes_namespace ]
+          target_label: namespace
+        - source_labels: [ __meta_kubernetes_pod_name ]
+          target_label: pod
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 ### loki-stack >>>>>>>>>>>>>>>>>>>>

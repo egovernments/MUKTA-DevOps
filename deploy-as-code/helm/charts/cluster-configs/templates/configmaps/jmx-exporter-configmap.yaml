@@ -1,0 +1,14 @@
+{{- with index .Values "cluster-configs" "configmaps" "jmx-exporter-config" }}
+---
+{{- range $ns := .namespace }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ index $.Values "cluster-configs" "configmaps" "jmx-exporter-config" "name" }}
+  namespace: {{ $ns }}
+data:
+  config.yaml: |
+    {{ index $.Values "cluster-configs" "configmaps" "jmx-exporter-config" "config" | nindent 4 }}
+---
+{{- end }}
+{{- end }}
