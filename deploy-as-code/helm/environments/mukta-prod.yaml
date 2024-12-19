@@ -1154,6 +1154,7 @@ kafka-ui:
 # Rate Analysis And Statement Service 
 
 rate-analysis:
+  memory_limits: "756Mi"
   java-enable-debug: true
   labour-cess-head-code: LC.7
   labour-cess-rate: 1
