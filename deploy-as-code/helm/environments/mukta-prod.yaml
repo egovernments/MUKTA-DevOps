@@ -549,6 +549,14 @@ measurement-service:
   measurement-service-search-max-limit: 50
   notification-sms-enabled: "true"
 
+boundary-service:
+  memory_limits: "756Mi"
+
+mdms-v2:
+  memory_limits: "756Mi"
+
+egov-localization:
+  memory_limits: "756Mi"
 
 measurement-registry:
   tracing-enabled: true
