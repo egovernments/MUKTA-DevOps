@@ -783,7 +783,7 @@ dashboards:
       url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
       token: ''
     k8s-views-pods:
-      url: https://raw.githubusercontent.com/odisha-muktasoft/DIGIT-DevOps/mukta-monitoring-upgrade/deploy-as-code/helm/charts/monitoring/dashboards/k8s-views-pods.json
+      url: https://raw.githubusercontent.com/egovernments/configs/refs/heads/master/monitoring-dashboards/Kubernetes-Views-Pods.json
       token: ''
     ingress-dashboard:
       url: https://raw.githubusercontent.com/egovernments/configs/master/monitoring-dashboards/k8s-ingress-dashbaord.json
@@ -797,8 +797,10 @@ dashboards:
     persistent-volumes:
       url: https://raw.githubusercontent.com/egovernments/configs/master/monitoring-dashboards/kubernetes-persistent-volumes.json
       token: ''
-        
-      
+    jmx-exporter:
+      url: https://raw.githubusercontent.com/egovernments/configs/refs/heads/master/monitoring-dashboards/jmx-exporter.json
+      token: ''
+
 
 ## Reference to external ConfigMap per provider. Use provider name as key and ConfigMap name as value.
 ## A provider dashboards must be defined either by external ConfigMaps or in values.yaml, not in both.
