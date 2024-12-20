@@ -484,6 +484,7 @@ digit-exchange-works:
   app-events-log-topic-name: "works-dx-exchange-event-log-queue"
 
 mukta-ifix-adapter:
+  memory_limits: "900Mi"
   tracing-enabled: true
   java-enable-debug: true
   egov-bill-search-limit: 100
