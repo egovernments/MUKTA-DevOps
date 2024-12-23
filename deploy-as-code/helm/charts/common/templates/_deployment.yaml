@@ -35,6 +35,9 @@ spec:
       labels:
       {{- include "common.labels" . | nindent 8 }}            
     spec:
+    {{- if .Values.image.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml .Values.image.imagePullSecrets | nindent 6 }}
+    {{- end }}
     {{- if .Values.initContainers.gitSync.enabled }}
       securityContext:
         fsGroup: 65533 # to make SSH key readable 
@@ -48,7 +51,7 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
     {{- end }}
-    {{- if or .Values.initContainers.gitSync.enabled .Values.extraVolumes }}     
+    {{- if or .Values.initContainers.gitSync.enabled .Values.extraVolumes (eq .Values.appType "java-spring") }}
       volumes:  
     {{- if .Values.initContainers.gitSync.enabled }}  
       - name: git-secret
@@ -57,10 +60,17 @@ spec:
           defaultMode: 288 # = mode 0440
       - name: workdir
         emptyDir: {}               
-    {{- end }}     
+    {{- end }}
+    {{- if eq .Values.appType "java-spring" }}
+      - name: jmx-agent
+        emptyDir: {}
+      - name: jmx-config
+        configMap:
+          name: jmx-exporter-config
+    {{- end }}
       {{- with .Values.extraVolumes }}
         {{- tpl . $ | nindent 6 }}
-      {{- end }}     
+      {{- end }}
     {{- end }}        
     {{- if .Values.affinity.preferSpreadAcrossAZ }}
       affinity:
@@ -108,7 +118,19 @@ spec:
         env: 
           {{- tpl  .Values.initContainers.gitSync.env . | nindent 12 }}
         {{- end }}        
-      {{- end }}            
+      {{- end }}
+      {{- if eq .Values.appType "java-spring" }}
+      {{ with .Values.initContainers.jmxExporter}}
+      - name: "jmx-agent-downloader"
+        image: "{{ .image.repository }}:{{ .image.tag }}"
+        imagePullPolicy: {{ .image.pullPolicy }}
+      {{- end }}
+        command:
+          {{- tpl  .Values.initContainers.jmxExporter.command . | nindent 10 }}
+        volumeMounts:
+        - name: jmx-agent
+          mountPath: /jmx-agent
+      {{- end }}
       containers:
       {{- with .Values.extraContainers }}
         {{- tpl . $ | nindent 8 }}
@@ -134,7 +156,7 @@ spec:
           lifecycle:
           {{- toYaml .Values.lifecycle | nindent 12 }}
         {{- end }}      
-        {{- if or .Values.initContainers.gitSync.enabled .Values.extraVolumeMounts }}
+        {{- if or .Values.initContainers.gitSync.enabled .Values.extraVolumeMounts (eq .Values.appType "java-spring") }}
           volumeMounts:              
         {{- if .Values.initContainers.gitSync.enabled }}            
           - name: workdir
@@ -142,11 +164,23 @@ spec:
         {{- end }}             
         {{- with .Values.extraVolumeMounts }}
           {{- tpl . $ | nindent 10 }}
-        {{- end }}          
+        {{- end }}
+        {{- if eq .Values.appType "java-spring" }}
+          - name: jmx-agent
+            mountPath: /jmx-agent
+          - name: jmx-config
+            mountPath: /config
+        {{- end }}
         {{- end }}     
       {{- if or .Values.env (eq .Values.appType "java-spring") (index .Values "global" "tracing-enabled") }}                         
-          env:  
-        {{- if .Values.env }}                                   
+          env:
+        {{- if eq .Values.appType "java-spring" }}
+          {{- $javaArgs := (index .Values "java-args") | cat " " .Values.initContainers.jmxExporter.javaAgent | cat " " .Values.javaArgs | trim }}
+          {{- $_ := set .Values "java-args" $javaArgs }}
+          {{- $javaOpts := (index .Values "heap") | cat " " .Values.defaultJavaOpts | trim }}
+          {{- $_ := set .Values "heap" $javaOpts }}
+        {{- end }}
+        {{- if .Values.env }}
           {{- tpl  .Values.env . | nindent 12 }}
         {{- end -}}         
         {{- if eq .Values.appType "java-spring" }} 

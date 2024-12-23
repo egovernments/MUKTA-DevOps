@@ -32,7 +32,14 @@ cluster-configs:
 
     egov-service-host:    
       name: egov-service-host
-      namespace: [ egov, monitoring ] 
+      namespace: [ egov, monitoring ]
+
+    jmx-exporter-config:
+      name: jmx-exporter-config
+      namespace: [ egov ]
+      config: |
+        rules:
+          - pattern: ".*"
 
   secrets:
     db: 
@@ -148,9 +155,13 @@ cluster-configs:
       name: program-service
 
     elasticsearch:
-      namespace: [ es-upgrade, monitoring, kafka-cluster, kafka-kraft, egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-kraft, egov, works ]
       name: elasticsearch-credential
 
     elasticsearch-certificate:
-      namespace: [ es-upgrade, monitoring, kafka-cluster, kafka-kraft, egov, works ]
+      namespace: [ es-upgrade, monitoring, kafka-kraft, egov, works ]
       name: elasticsearch-certs
+
+    jupyterhub:
+      namespace: jupyter
+      name: jupyterhub-creds

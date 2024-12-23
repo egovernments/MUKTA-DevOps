@@ -9,6 +9,9 @@
 
 {{- define "common.labels" -}}
 app: {{ template "common.name" . }}
+{{- if eq .Values.appType "java-spring" }}
+app-type: java
+{{- end }}
 {{- if .Values.labels.group }}      
 group: {{ .Values.labels.group }}  
 {{- end }}  
