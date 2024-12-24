@@ -130,6 +130,8 @@ cluster-configs:
         ifix-adapter: "http://ifix-adapter.works:8080/"
 
 digit-exchange:
+  memory_limits: "512Mi"
+  cpu_limits: "300m"
   tracing-enabled: true
   java-enable-debug: true
   app-enable-events-log: true
@@ -143,10 +145,11 @@ digit-exchange:
   app-events-log-topic-name: "ifix-dx-exchange-event-log-queue"
 
 program-service:
+  memory_limits: "512Mi"
+  cpu_limits: "300m"
   tracing-enabled: true
   java-enable-debug: true
   heap: "-Xmx256m -Xms256m"
-  memory_limits: 512Mi
   egov-idgen-idname: "ifix.program.number"
   adapter-host: "http://ifms-adapter.works:8080/"
   adapter-path: "ifms-adapter/v1/"
