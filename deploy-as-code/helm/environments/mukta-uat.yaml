@@ -1143,7 +1143,7 @@ loki:
       - ReadWriteOnce
     size: 30Gi
   serviceAccount:
-    annotations: { }
+    annotations: {}
   additionalConfigs:
     schema_config:
       configs:
@@ -1159,17 +1159,45 @@ loki:
         active_index_directory: /data/loki/index
         cache_location: /data/loki/index_cache
         shared_store: filesystem
-        cache_ttl: 24h
+        cache_ttl: 168h
       filesystem:
         directory: /data/loki/chunks
     compactor:
       working_directory: /data/loki/boltdb-shipper-compactor
       shared_store: filesystem
       retention_enabled: true
-      compaction_interval: 168h
+      compaction_interval: 24h
+    limits_config:
+      retention_period: 168h  # Retain logs for 30 days
+      split_queries_by_interval: 15m  # Split queries for better performance
+      max_query_parallelism: 32  # Increased parallel query processing
+      max_entries_limit_per_query: 50000  # Higher log limits per query
+      ingestion_rate_mb: 32  # Increased ingestion rate
+      ingestion_burst_size_mb: 64  # Increased burst capacity
+    chunk_store_config:
+      max_look_back_period: 168h  # Allow looking back 15 days in hot storage
     table_manager:
       retention_deletes_enabled: true
       retention_period: 168h  # 7 days
+  promtail:
+    scrape_configs:
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        pipeline_stages:
+          - match:
+              selector: '{namespace!="cert-manager", namespace!="jupyter", namespace!="kube-node-lease", namespace!="kube-public", namespace!="kube-system", namespace!="monitoring"}'
+              action: keep
+        relabel_configs:
+          - source_labels: [ __meta_kubernetes_pod_label_name ]
+            target_label: job
+          - source_labels: [ __meta_kubernetes_namespace ]
+            target_label: namespace
+          - source_labels: [ __meta_kubernetes_pod_name ]
+            target_label: pod
+          - action: replace
+            source_labels: [ __meta_kubernetes_pod_node_name ]
+            target_label: node
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 ### jupyter-hub >>>>>>>>>>>>>>>>>>>>

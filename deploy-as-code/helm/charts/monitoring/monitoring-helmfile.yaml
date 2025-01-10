@@ -43,6 +43,8 @@ releases:
       serviceAccount:
         annotations: {{ .Values.loki.serviceAccount.annotations | toYaml | nindent 10 }}
       {{- end }}
+  - promtail:
+      scrape_configs: {{ .Values.loki.promtail.scrape_configs | toYaml | nindent 8 }}
 
 - name: kube-prometheus-stack
   installed: true
