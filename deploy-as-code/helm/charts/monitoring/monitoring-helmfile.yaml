@@ -35,6 +35,8 @@ releases:
         schema_config: {{ .Values.loki.additionalConfigs.schema_config | toYaml | nindent 10 }}
         storage_config: {{ .Values.loki.additionalConfigs.storage_config | toYaml | nindent 10 }}
         compactor: {{ .Values.loki.additionalConfigs.compactor | toYaml | nindent 10 }}
+        limits_config: {{ .Values.loki.additionalConfigs.limits_config | toYaml | nindent 10 }}
+        chunk_store_config: {{ .Values.loki.additionalConfigs.chunk_store_config | toYaml | nindent 10 }}
         table_manager: {{ .Values.loki.additionalConfigs.table_manager | toYaml | nindent 10 }}
       {{- end }}
       {{- if .Values.loki.serviceAccount.annotations }}
