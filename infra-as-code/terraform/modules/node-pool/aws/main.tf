@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "ap-south-1"
-}
-
 resource "aws_iam_role" "ec2_iam" {
   name = "${var.node_group_name}-ec2-iam"
 
@@ -39,18 +35,11 @@ resource "aws_iam_role_policy_attachment" "worker_nodes_AmazonEC2ContainerRegist
 data "aws_ami" "eks_worker" {
   filter {
     name   = "name"
-    values = ["amazon-eks-node-${var.cluster_version}-v*"]
+    values = ["amazon-eks-node-${var.kubernetes_version}-v*"]
   }
 
   most_recent = true
   owners      = ["602401143452"] # Amazon EKS AMI Account ID
-}
-
-data "aws_security_group" "security_group" {
-  filter {
-    name = "tag:Name"
-    values = ["${var.cluster_name}-eks_worker_sg"]
-  }
 }
 
 resource "aws_launch_template" "launch_template" {
@@ -59,7 +48,7 @@ resource "aws_launch_template" "launch_template" {
   ebs_optimized     = true
 
   network_interfaces {
-    security_groups = ["${data.aws_security_group.security_group.id}"]  
+    security_groups = var.security_groups
   }
 
   block_device_mappings {
@@ -83,19 +72,13 @@ Content-Type: text/x-shellscript; charset="us-ascii"
   )  
 }
 
-data "aws_subnet" "subnet" {
-  filter {
-    name = "tag:Name"
-    values = ["${var.availability_zones}-${var.cluster_name}"]
-  }
-}
+resource "aws_eks_node_group" "ng" {
 
-resource "aws_eks_node_group" "main" {
   cluster_name       = "${var.cluster_name}"
   node_group_name    = "${var.node_group_name}"
   instance_types     = "${var.instance_types}"
   node_role_arn      = "${aws_iam_role.ec2_iam.arn}"
-  subnet_ids         = ["${data.aws_subnet.subnet.id}"]
+  subnet_ids         = "${var.subnet}"
   capacity_type      = "SPOT"  
   
   taint {
@@ -112,9 +95,9 @@ resource "aws_eks_node_group" "main" {
   }
    
   scaling_config {
-    desired_size = 1
+    desired_size = "${var.node_group_desired_size}"
     min_size     = 1
-    max_size     = 1
+    max_size     = "${var.node_group_max_size}"
   }
   
 
