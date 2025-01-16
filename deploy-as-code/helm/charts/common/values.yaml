@@ -108,20 +108,20 @@ healthChecks:
         httpGet:
             path: "{{ .Values.healthChecks.livenessProbePath }}"
             port: {{ .Values.httpPort }}
-        initialDelaySeconds: 30
+        initialDelaySeconds: 60
         timeoutSeconds: 3
         periodSeconds: 60
         successThreshold: 1
-        failureThreshold: 5
+        failureThreshold: 10
     readinessProbe: |
         httpGet:
             path: "{{ .Values.healthChecks.readinessProbePath }}"
             port: {{ .Values.httpPort }}
-        initialDelaySeconds: 30
+        initialDelaySeconds: 300
         timeoutSeconds: 3
-        periodSeconds: 30
+        periodSeconds: 60
         successThreshold: 1
-        failureThreshold: 5        
+        failureThreshold: 10
 
 lifecycle:
     preStop:

@@ -48,7 +48,7 @@ shared-storage: "[{'name': 'Shared Folder', 'path': '/var/lib/pgadmin/shared_fol
 
 persistence:
   enabled: false
-  storageClassName: gp2
+  storageClassName: gp3
   accessMode: ReadWriteOnce
   volumeMode: Filesystem
 #  dataDirSize: 1Gi

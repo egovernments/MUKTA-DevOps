@@ -30,7 +30,7 @@ spec:
         deployment-timestamp: "{{ date "20060102150405" .Release.Time }}"    
       {{- end }}          
       {{- if .Values.additionalAnnotations }}                                   
-        {{- tpl  .Values.additionalAnnotations . | nindent 8 }}
+        {{- tpl .Values.additionalAnnotations . | nindent 8 }}
       {{- end }}        
       labels:
       {{- include "common.labels" . | nindent 8 }}            
@@ -88,7 +88,7 @@ spec:
     {{- end }}     
       initContainers:
       {{- with .Values.initContainers.extraInitContainers }}
-        {{- tpl . $ | nindent 8 }}
+        {{- tpl . $ | nindent 6 }}
       {{- end }}
       {{- if .Values.initContainers.dbMigration.enabled }}
       {{ with .Values.initContainers.dbMigration}}
@@ -98,7 +98,7 @@ spec:
       {{- end }}    
         {{- if .Values.initContainers.dbMigration.env }}               
         env: 
-          {{- tpl  .Values.initContainers.dbMigration.env . | nindent 12 }}
+          {{- tpl .Values.initContainers.dbMigration.env . | nindent 12 }}
         {{- end }}
       {{- end }}        
       {{- if .Values.initContainers.gitSync.enabled }}
@@ -116,7 +116,7 @@ spec:
           mountPath: "/work-dir"                   
         {{- if .Values.initContainers.gitSync.env }}               
         env: 
-          {{- tpl  .Values.initContainers.gitSync.env . | nindent 12 }}
+          {{- tpl .Values.initContainers.gitSync.env . | nindent 12 }}
         {{- end }}        
       {{- end }}
       {{- if eq .Values.appType "java-spring" }}
@@ -126,7 +126,7 @@ spec:
         imagePullPolicy: {{ .image.pullPolicy }}
       {{- end }}
         command:
-          {{- tpl  .Values.initContainers.jmxExporter.command . | nindent 10 }}
+          {{- tpl .Values.initContainers.jmxExporter.command . | nindent 10 }}
         volumeMounts:
         - name: jmx-agent
           mountPath: /jmx-agent
@@ -140,7 +140,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}  
       {{- if .Values.args }}              
           args:  
-          {{- tpl  .Values.args . | nindent 12 }}          
+          {{- tpl .Values.args . | nindent 12 }}          
        {{- end }}             
           ports:
             - name: http
@@ -148,9 +148,9 @@ spec:
               protocol: TCP
       {{- if .Values.healthChecks.enabled }}              
           readinessProbe:
-          {{- tpl  .Values.healthChecks.readinessProbe . | nindent 12 }} 
+          {{- tpl .Values.healthChecks.readinessProbe . | nindent 12 }} 
           livenessProbe:
-          {{- tpl  .Values.healthChecks.livenessProbe . | nindent 12 }}                      
+          {{- tpl .Values.healthChecks.livenessProbe . | nindent 12 }}                      
        {{- end }}       
         {{- if .Values.lifecycle }}
           lifecycle:
@@ -181,13 +181,13 @@ spec:
           {{- $_ := set .Values "heap" $javaOpts }}
         {{- end }}
         {{- if .Values.env }}
-          {{- tpl  .Values.env . | nindent 12 }}
+          {{- tpl .Values.env . | nindent 12 }}
         {{- end -}}         
         {{- if eq .Values.appType "java-spring" }} 
-          {{- tpl  .Values.extraEnv.java . | nindent 12 }}         
+          {{- tpl .Values.extraEnv.java . | nindent 12 }}         
         {{- end -}} 
         {{- if or (index .Values "global" "tracing-enabled") (index .Values "tracing-enabled") }} 
-          {{- tpl  .Values.extraEnv.jaeger . | nindent 12 }}         
+          {{- tpl .Values.extraEnv.jaeger . | nindent 12 }}         
         {{- end }}
       {{- end }}
       {{- if .Values.resources }}                                     

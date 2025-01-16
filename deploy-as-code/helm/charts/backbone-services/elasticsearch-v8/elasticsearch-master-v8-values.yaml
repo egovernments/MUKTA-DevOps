@@ -92,7 +92,7 @@ envFrom: []
 # the X-Pack license
 secretMounts:
   - name: elasticsearch-certs
-    secretName: elasticsearch-infra-certs
+    secretName: elasticsearch-certs
     path: /usr/share/elasticsearch/config/certs
 
 podAnnotations: {}

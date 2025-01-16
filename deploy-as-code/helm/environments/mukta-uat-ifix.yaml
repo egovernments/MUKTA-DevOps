@@ -10,12 +10,11 @@ cluster-configs:
       [
         backbone,
         cert-manager,
-        es-cluster,
-        kafka-cluster,
+        es-upgrade,
+        kafka-kraft,
         logging,
         monitoring,
         playground,
-        zookeeper-cluster,
         ifix
       ]
 
@@ -27,7 +26,7 @@ cluster-configs:
       namespace: [ ifix ]
       name: db
     program-service:
-      namespace: [ ifix ]
+      namespace: [ ifix, works ]
       name: program-service
     elasticsearch:
       namespace: [ ifix ]
@@ -37,10 +36,10 @@ cluster-configs:
     egov-config:
       namespace: [ ifix, monitoring ]
       data:
-        db-host: "mukta-uat-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com"
+        db-host: "mukta-uat-new-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com"
         db-name: "mukta_uat_db"
-        db-url: "jdbc:postgresql://mukta-uat-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/mukta_uat_db"
-        ifix-db-url: "jdbc:postgresql://mukta-uat-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/mukta_uat_db?currentSchema=ifix"
+        db-url: "jdbc:postgresql://mukta-uat-new-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/mukta_uat_db"
+        ifix-db-url: "jdbc:postgresql://mukta-uat-new-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/mukta_uat_db?currentSchema=ifix"
         domain: "https://mukta-uat.digit.org"
         egov-services-fqdn-name: "https://mukta-uat.digit.org/"
         egov-state-level-tenant-id: "od"
@@ -129,7 +128,11 @@ cluster-configs:
         program-service: "http://program-service.ifix:8080/"
         ifix-adapter: "http://ifix-adapter.works:8080/"
 
+    jmx-exporter-config:
+      namespace: [ ifix ]
+
 digit-exchange:
+  cpu_limits: "100m"
   tracing-enabled: true
   java-enable-debug: true
   app-enable-events-log: true
@@ -147,6 +150,7 @@ program-service:
   java-enable-debug: true
   heap: "-Xmx256m -Xms256m"
   memory_limits: 512Mi
+  cpu_limits: "100m"
   egov-idgen-idname: "ifix.program.number"
   adapter-host: "http://ifms-adapter.works:8080/"
   adapter-path: "ifms-adapter/v1/"

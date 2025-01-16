@@ -11,18 +11,18 @@ initContainers:
   extraInitContainers: |
     - name: "gateway-kubernetes-discovery"
       image: {{ .Values.global.containerRegistry }}/gateway-kubernetes-discovery:core-2.9-lts-mvn-check-7f4ff55ce3-5
-      env: 
+      env:
       - name: "OUTPUT_FILE_PATH"
-        value: "/etc/zuul/routes.properties" 
+        value: "/etc/zuul/routes.properties"
       - name: "NAMESPACE"
-        value: "egov,sanitation,works,health,staging,fsm,ifix,mukta,urban"         
+        value: "egov,ifix,works"
       volumeMounts:
       - name: zuul-routes
         mountPath: /etc/zuul
 
 extraVolumes: |
   - name: zuul-routes
-    emptyDir: {}  
+    emptyDir: {}
 
 extraVolumeMounts: |
   - name: zuul-routes
@@ -44,7 +44,7 @@ appType: "java-spring"
 tracing-enabled: true
 server-tomcat-max-threads: "350"
 server-tomcat-max-connections: "1500"
-java-args: ""
+java-args: "-Dspring.profiles.active=monitoring"
 egov-open-endpoints-whitelist: "/user/oauth/token,/user-otp/v1/_send,/otp/v1/_validate,/user/citizen/_create,/localization/messages,/localization/messages/v1/_search,/user/password/nologin/_update,/tenant/v1/tenant/_search,/egov-location/boundarys,/egov-location/boundarys/boundariesByBndryTypeNameAndHierarchyTypeName,/egov-location/boundarys/getLocationByLocationName,/egov-mdms-service/v1/_search,/egov-location/location/v11/geography/_search,/filestore/v1/files/url,/pt-calculator-v2/billing-slab/_search,/egov-searcher/property-services/propertyopensearch/_get,/edcr/rest/dcr/downloadfile,/egov-location/location/v11/boundarys/_search,/filestore/v1/files/id,/filestore/v1/files,/filestore/v1/files/tag"
 egov-mixed-mode-endpoints-whitelist: "/user/_search,/access/v1/actions/mdms/_get,/tl-services/v1/_search,/tl-services/v1/BPAREG/_search,/tl-services/v1/BPAREG/_create,/tl-services/v1/BPAREG/_update,/tl-calculator/v1/BPAREG/_getbill,/bpa-services/bpa/appl/_search,/edcr/rest/dcr/scrutinize,/edcr/rest/dcr/scrutinydetails"
 eventlog-enabled: "false"
@@ -65,10 +65,10 @@ env: |
     value: "true"
   - name: URL_POSTHOOK_LISTS
     value: {{ index .Values "posthook-config" | quote }}
-  - name: URL_PREHOOK_LISTS        
+  - name: URL_PREHOOK_LISTS
     value: {{ index .Values "prehook-config" | quote }}
   - name: GATEWAY_ROUTES_TL_CALCULATOR_URL
-    value: http://tl-calculator:8080/                                  
+    value: http://tl-calculator:8080/
   - name: SERVER_PORT
     value: "8080"
   {{- if index .Values "java-debug" }}
@@ -80,6 +80,8 @@ env: |
   {{- end }}
   - name: JAVA_OPTS
     value: {{ index .Values "heap" | quote }}
+  - name: JAVA_ARGS
+    value: {{ index .Values "java-args" | quote }}
   - name: SPRING_KAFKA_CONSUMER_GROUP_ID
     value: egov-api-gateway
   - name: SPRING_KAFKA_PRODUCER_KEY_SERIALIZER
@@ -89,15 +91,15 @@ env: |
   - name: EGOV_CUSTOM_ASYNC_FILTER_TOPIC
     value: res-custom-filter
   - name: EGOV_OPEN_ENDPOINTS_WHITELIST
-    value: {{ index .Values "egov-open-endpoints-whitelist" | quote }}  
+    value: {{ index .Values "egov-open-endpoints-whitelist" | quote }}
   - name: EGOV_MIXED_MODE_ENDPOINTS_WHITELIST
-    value: {{ index .Values "egov-mixed-mode-endpoints-whitelist" | quote }}    
+    value: {{ index .Values "egov-mixed-mode-endpoints-whitelist" | quote }}
   - name: EVENTLOG_ENABLED
-    value: {{ index .Values "eventlog-enabled" | quote }}   
+    value: {{ index .Values "eventlog-enabled" | quote }}
   - name: EVENTLOG_TOPIC
-    value: {{ index .Values "eventlog-topic" | quote }}   
+    value: {{ index .Values "eventlog-topic" | quote }}
   - name: EVENTLOG_URLS_WHITELIST
-    value: {{ index .Values "eventlog-whitelist" | quote }}   
+    value: {{ index .Values "eventlog-whitelist" | quote }}
   - name: EGOV_AUTHORIZE_ACCESS_CONTROL_HOST
     valueFrom:
       configMapKeyRef:
@@ -107,7 +109,7 @@ env: |
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: egov-user     
+        key: egov-user
   - name: GATEWAY_HOST_CONNECT_TIMEOUT_MILLIS
     value: "20000"
   - name: GATEWAY_HOST_SOCKET_TIMEOUT_MILLIS
@@ -120,22 +122,20 @@ env: |
     value: "false"
   - name: MANAGEMENT_SECURITY_ENABLED
     value: "false"
-  - name: JAVA_ARGS
-    value: {{ index .Values "java-args" | quote }}
   - name: STATE_LEVEL_TENANT_ID
     valueFrom:
       configMapKeyRef:
         key: egov-state-level-tenant-id
-        name: egov-config    
+        name: egov-config
   - name: SPRING_DATA_REDIS_DEFAULT_REPLENISHRATE
     value: "10"
   - name: SPRING_DATA_REDIS_DEFAULT_BURSTCAPACITY
     value: "10"
   - name: SPRING_ROUTES_FILEPATH
-    value: "file:/etc/zuul/routes.properties"   
+    value: "file:/etc/zuul/routes.properties"
   {{- if index .Values "home-isolation-chatbot-router-enabled" }}
   - name: HOME_ISOLATION_CHATBOT_ROUTER_ENABLED
-    value: {{ index .Values "home-isolation-chatbot-router-enabled" | quote }}  
+    value: {{ index .Values "home-isolation-chatbot-router-enabled" | quote }}
   - name: CHATBOT_CONTEXT_PATH
     value: "/whatsapp-webhook"
   - name: EGOV_USER_ISOLATION_SERVICE_HOST
@@ -149,12 +149,12 @@ env: |
         name: egov-service-host
         key: home-isolation-chatbot
   {{- end }}
-  - name: SPRING_DATA_REDIS_HOST     
-  {{- if index .Values "cluster-configs" "configmaps" "egov-service-host" "data" "redis-host" }}   
+  - name: SPRING_DATA_REDIS_HOST
+  {{- if index .Values "cluster-configs" "configmaps" "egov-service-host" "data" "redis-host" }}
     valueFrom:
       configMapKeyRef:
         name: egov-service-host
-        key: redis-host   
+        key: redis-host
   {{- else }}
     value: "redis.backbone"
   {{- end }}
