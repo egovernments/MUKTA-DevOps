@@ -119,7 +119,7 @@ healthChecks:
             port: {{ .Values.httpPort }}
         initialDelaySeconds: 30
         timeoutSeconds: 3
-        periodSeconds: 30
+        periodSeconds: 60
         successThreshold: 1
         failureThreshold: 5        
 
@@ -132,15 +132,12 @@ lifecycle:
             - "sleep 10"
 
 memory_limits: "512Mi"
-cpu_limits: "100m"
 resources: |
   {{- if eq .Values.appType "java-spring" -}}
   requests:
     memory: {{ .Values.memory_limits | quote }}
-    cpu: {{ .Values.cpu_limits | quote }}
   limits:
     memory: {{ .Values.memory_limits | quote }}
-    cpu: {{ .Values.cpu_limits | quote }}
   {{- end -}}
 ## Allows specification of additional environment variables
 extraEnv:
@@ -252,8 +249,6 @@ extraEnv:
         value: "false"
       - name: STATE_SCHEMA_INDEX_POSITION_TENANTID
         value: "0"
-            
-            
             
   jaeger: |             
       - name: JAEGER_SERVICE_NAME
