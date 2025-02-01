@@ -94,6 +94,10 @@ module "eks" {
       })
     }
   }
+  vpc_config {
+    endpoint_private_access   = "false"
+    public_access_cidrs       = [ "13.202.240.208/32", "3.6.20.68/32" ]
+  }
   node_security_group_tags = {
     "karpenter.sh/discovery" = var.cluster_name
   }
