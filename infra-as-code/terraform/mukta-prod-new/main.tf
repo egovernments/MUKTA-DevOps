@@ -29,6 +29,9 @@ module "db" {
   identifier                    = "${var.cluster_name}-db"
   db_name                       = "${var.db_name}"
   environment                   = "${var.cluster_name}"
+  apply_immediately             = "true"
+  allow_major_version_upgrade   = "true"
+  auto_minor_version_upgrade    = "false"
 }
 
 data "aws_eks_cluster" "cluster" {
