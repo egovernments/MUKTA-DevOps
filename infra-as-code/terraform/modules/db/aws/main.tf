@@ -26,13 +26,16 @@ resource "aws_db_instance" "rds_postgres" {
   db_subnet_group_name    = "${aws_db_subnet_group.db_subnet_group.name}"
   copy_tags_to_snapshot   = "true"
   skip_final_snapshot     = "true"
+  apply_immediately       = "${var.apply_immediately}"
+  deletion_protection     = "${var.deletion_protection}"
+  auto_minor_version_upgrade = "${var.auto_minor_version_upgrade}"
+  allow_major_version_upgrade = "${var.allow_major_version_upgrade}"
 
-    tags = "${
-    tomap({
-      "Name" =  "${var.environment}-db",
-      "environment" = "${var.environment}"
-      "KubernetesCluster" = "${var.environment}"
-    })
-  }"  
+  tags = "${
+  tomap({
+    "Name" =  "${var.environment}-db",
+    "environment" = "${var.environment}"
+    "KubernetesCluster" = "${var.environment}"
+  })}"
 }
 

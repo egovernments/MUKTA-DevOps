@@ -32,6 +32,7 @@ module "db" {
   apply_immediately             = "true"
   allow_major_version_upgrade   = "true"
   auto_minor_version_upgrade    = "false"
+  deletion_protection           = "true"
 }
 
 data "aws_eks_cluster" "cluster" {

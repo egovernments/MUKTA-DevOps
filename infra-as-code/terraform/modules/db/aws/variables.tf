@@ -11,3 +11,9 @@ variable "administrator_login_password" {}
 variable "db_name" {}
 variable "identifier" {}
 variable "environment" {}
+variable "apply_immediately" {}
+variable "allow_major_version_upgrade" {}
+variable "auto_minor_version_upgrade" {}
+variable "deletion_protection" {
+  default = "false"
+}
