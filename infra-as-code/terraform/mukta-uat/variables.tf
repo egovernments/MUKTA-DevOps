@@ -31,7 +31,7 @@ variable "kubernetes_version" {
 
 variable "instance_types" {
   description = "Arry of instance types for SPOT instances"
-  default = ["r5ad.xlarge", "r5a.xlarge", "r6a.xlarge"]
+  default = ["r5ad.large", "r5a.large", "r6a.large"]
   
 }
 
@@ -42,12 +42,12 @@ variable "min_worker_nodes" {
 
 variable "desired_worker_nodes" {
   description = "eGov recommended below worker node counts as default for desired nodes"
-  default = "3" #REPLACE IF NEEDED
+  default = "4" #REPLACE IF NEEDED
 }
 
 variable "max_worker_nodes" {
   description = "eGov recommended below worker node counts as default for max nodes"
-  default = "3" #REPLACE IF NEEDED
+  default = "4" #REPLACE IF NEEDED
 }
 
 variable "db_name" {

@@ -82,6 +82,18 @@ module "eks" {
     delete = "15m" 
     update = "60m"
   }
+  cluster_addons = {
+    vpc-cni = {
+      most_recent              = true
+      before_compute           = true
+      configuration_values = jsonencode({
+        env = {
+          # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
+          ENABLE_PREFIX_DELEGATION           = "true"
+        }
+      })
+    }
+  }
   node_security_group_tags = {
     "karpenter.sh/discovery" = var.cluster_name
   }
@@ -95,13 +107,6 @@ module "aws_auth" {
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.0"
   manage_aws_auth_configmap = true
-  aws_auth_roles = [
-    {
-      groups = ["system:bootstrappers", "system:nodes"]
-      rolearn = "arn:aws:iam::880678429748:role/mukta-uat20230420062505107400000018"
-      username = "system:node:{{EC2PrivateDNSName}}"
-    }
-  ]
   aws_auth_users = [
     {
       groups = ["system:masters"]
@@ -109,7 +114,7 @@ module "aws_auth" {
       username = "mukta-uat-admin"
     },
     {
-      groups = ["reader"]
+      groups = ["global-readonly"]
       userarn = "arn:aws:iam::880678429748:user/mukta-uat-kube-user"
       username = "mukta-uat-kube-user"
     } 
@@ -141,7 +146,6 @@ module "eks_managed_node_group" {
   max_size     = var.max_worker_nodes
   desired_size = var.desired_worker_nodes
   instance_types = var.instance_types
-  capacity_type  = "SPOT"
   ebs_optimized  = "true"
   enable_monitoring = "true"
   iam_role_additional_policies = {
@@ -149,6 +153,7 @@ module "eks_managed_node_group" {
     AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
     SQS_POLICY                   = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
   }
+  user_data_template_path = "user-data.yaml"
   labels = {
     Environment = var.cluster_name
   }
