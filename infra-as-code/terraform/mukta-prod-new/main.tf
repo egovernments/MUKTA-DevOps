@@ -64,7 +64,7 @@ module "eks" {
   create_iam_role = false
   iam_role_arn    = "arn:aws:iam::611316314659:role/mukta-prod20230516095441974700000012"
   cluster_endpoint_public_access  = true
-  cluster_endpoint_private_access = false
+  cluster_endpoint_private_access = true
   cluster_endpoint_public_access_cidrs = ["13.202.240.208/32", "3.6.20.68/32"]
   authentication_mode = "API_AND_CONFIG_MAP"
   subnet_ids      = concat(module.network.private_subnets, module.network.public_subnets)
