@@ -4,12 +4,12 @@ creation_rules:
         # KMS set A is used
 
         # PROD environment ------------------------------------------------------------------------------------------------------------- #
-        - kms: "arn:aws:kms:ap-south-1:611316314659:key/df40d050-3009-4bd8-9d2e-dd70de38ecad"
+        - kms: "arn:aws:kms:ap-south-1:218381940040:key/9a3b0835-7713-4925-8b3d-da7e421d28d2"
           encrypted_regex: '^(secrets)$'
           path_regex: 'mukta-prod-.*\.yaml'
 
         # UAT environment ------------------------------------------------------------------------------------------------------------- #
-        - kms: "arn:aws:kms:ap-south-1:880678429748:key/fb845d89-ce3e-433f-91b6-a5fb96fee4df"
+        - kms: "arn:aws:kms:ap-south-1:218381940040:key/9a3b0835-7713-4925-8b3d-da7e421d28d2"
           encrypted_regex: '^(secrets)$'
           path_regex: 'mukta-uat-.*\.yaml'
 
